@@ -12,7 +12,7 @@ namespace DeathMustDieGameCheat
     {
         const string fileLoc = @"C:\Users\denis\AppData\LocalLow\Realm Archive\Death Must Die\Saves\Slot_0.sav";
 
-        static readonly string[] classes = ["Knight", "Sorceress", "Assassin", "Barbarian", "Warrior", "Ranger"];
+        static readonly string[] classes = ["Knight", "Sorceress", "Assassin", "Barbarian", "Warrior", "Ranger", "Druid"];
 
         static void Main(string[] args)
         {

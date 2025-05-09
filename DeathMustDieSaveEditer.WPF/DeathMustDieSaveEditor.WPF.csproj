@@ -14,7 +14,8 @@
     <None Remove="ItemSelection.png" />
     <None Remove="Kront.png" />
     <None Remove="Nixi.png" />
-    <None Remove="Resources\Assets\Lorien.png" />
+    <None Remove="Leaf.png" />
+    <None Remove="Lorien.png" />
     <None Remove="Skadi.png" />
     <None Remove="Witch.png" />
   </ItemGroup>
@@ -33,6 +34,9 @@
     <Content Include="Resources\Assets\Kront.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
+    <Content Include="Resources\Assets\Leaf.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
     <Content Include="Resources\Assets\Nixi.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
@@ -42,11 +46,8 @@
     <Content Include="Resources\Assets\Witch.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-  </ItemGroup>
-
-  <ItemGroup>
     <Content Include="Resources\Assets\Lorien.png">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
   </ItemGroup>
 
