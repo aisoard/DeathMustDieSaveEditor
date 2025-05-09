@@ -68,6 +68,7 @@ namespace DeathMustDieSaveEditor.Core.Models.SaveStructure
     {
         public string Code { get; set; }
         public int Levels { get; set; }
+        public bool Enhanced { get; set; }
     }
 
     [Serializable]
@@ -128,24 +129,6 @@ namespace DeathMustDieSaveEditor.Core.Models.SaveStructure
     }
 
     [Serializable]
-    public class LibraryState
-    {
-        public int Width { get; set; }
-        public int Height { get; set; }
-        public IList<Item> Items { get; set; }
-        public IList<ItemSlot> ItemSlots { get; set; }
-    }
-
-    [Serializable]
-    public class BackpackState
-    {
-        public int Width { get; set; }
-        public int Height { get; set; }
-        public IList<Item> Items { get; set; }
-        public IList<ItemSlot> ItemSlots { get; set; }
-    }
-
-    [Serializable]
     public class Stashes
     {
         public IList<string> StashJsons { get; set; }
@@ -167,8 +150,8 @@ namespace DeathMustDieSaveEditor.Core.Models.SaveStructure
         public Stashes Stashes { get; set; }
         public string StashJson { get; set; }
         public StashState StashState { get; set; }
-        public LibraryState LibraryState { get; set; }
-        public BackpackState BackpackState { get; set; }
+        public StashState LibraryState { get; set; }
+        public StashState BackpackState { get; set; }
         public string StashUpgradesJson { get; set; }
         public int Gold { get; set; }
 
