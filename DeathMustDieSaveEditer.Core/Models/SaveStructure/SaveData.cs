@@ -1,5 +1,6 @@
 ﻿using Newtonsoft.Json;
 using DeathMustDieSaveEditor.Core.Models.SaveStructure;
+using System.Text.Json.Serialization;
 
 namespace DeathMustDieSaveEditor.Core.Models.SaveStructure
 {
@@ -49,6 +50,9 @@ namespace DeathMustDieSaveEditor.Core.Models.SaveStructure
     [Serializable]
     public class EquipmentStateWrapper
     {
+        public IList<EquipmentState> LoadoutStates { get; set; }
+        public IList<bool> LoadoutUnlocks { get; set; }
+        public int SelectedLoadout { get; set; }
         public EquipmentState EquipmentState { get; set; }
     }
 
@@ -56,6 +60,7 @@ namespace DeathMustDieSaveEditor.Core.Models.SaveStructure
     public class EquipmentState
     {
         public IList<Item> Items { get; set; }
+        public IList<ItemSlot> ItemSlots { get; set; }
     }
 
     [Serializable]
@@ -71,6 +76,7 @@ namespace DeathMustDieSaveEditor.Core.Models.SaveStructure
         public int Width { get; set; }
         public int Height { get; set; }
         public IList<Item> Items { get; set; }
+        public IList<ItemSlot> ItemSlots { get; set; }
     }
 
     [Serializable]
@@ -86,7 +92,39 @@ namespace DeathMustDieSaveEditor.Core.Models.SaveStructure
         public string DropVariant { get; set; }
         public IList<Affix> Affixes { get; set; }
         public bool WasOwnedByPlayer { get; set; }
-        public string BoundToCharacterCode { get; set; }
+    }
+
+    [Serializable]
+    public class Id
+    {
+        public int _value { get; set; }
+    }
+
+    [Serializable]
+    public class ItemSlot
+    {
+        public bool IsEmpty { get; set; }
+        public Id Id { get; set; }
+    }
+
+    [Serializable]
+    public class Entry
+    {
+        public Id Id { get; set; }
+        public Item Item { get; set; }
+    }
+
+    [Serializable]
+    public class RepoState
+    {
+        public Id LastId { get; set; }
+        public IList<Entry> Entries { get; set; }
+
+        public Item? GetItemById(Id id)
+        {
+            var item = Entries.FirstOrDefault(x => x.Id._value == id._value);
+            return item?.Item;
+        }
     }
 
     [Serializable]
@@ -95,6 +133,7 @@ namespace DeathMustDieSaveEditor.Core.Models.SaveStructure
         public int Width { get; set; }
         public int Height { get; set; }
         public IList<Item> Items { get; set; }
+        public IList<ItemSlot> ItemSlots { get; set; }
     }
 
     [Serializable]
@@ -103,6 +142,13 @@ namespace DeathMustDieSaveEditor.Core.Models.SaveStructure
         public int Width { get; set; }
         public int Height { get; set; }
         public IList<Item> Items { get; set; }
+        public IList<ItemSlot> ItemSlots { get; set; }
+    }
+
+    [Serializable]
+    public class Stashes
+    {
+        public IList<string> StashJsons { get; set; }
     }
 
     [Serializable]
@@ -110,15 +156,20 @@ namespace DeathMustDieSaveEditor.Core.Models.SaveStructure
     {
         public string ProgressionJson { get; set; }
         public string DarknessJson { get; set; }
+        public string DarknessModesJson { get; set; }
         public string AchievementsJson { get; set; }
         public string TalentsJson { get; set; }
         public string UnlocksJson { get; set; }
+        public RepoState PlayerRepoState { get; set; }
+        public RepoState ShopRepoState { get; set; }
         public IList<InventoryData> InventoryData { get; set; }
         public string ShopJson { get; set; }
+        public Stashes Stashes { get; set; }
         public string StashJson { get; set; }
         public StashState StashState { get; set; }
         public LibraryState LibraryState { get; set; }
         public BackpackState BackpackState { get; set; }
+        public string StashUpgradesJson { get; set; }
         public int Gold { get; set; }
 
         public IEnumerable<Item> GetEquippedItems(string charecterCode)
@@ -126,7 +177,14 @@ namespace DeathMustDieSaveEditor.Core.Models.SaveStructure
             var charEquipped = this.InventoryData.Where(x => x.CharacterCode == charecterCode).FirstOrDefault();
 
             var res = JsonConvert.DeserializeObject<EquipmentStateWrapper>(charEquipped.Json);
-            return res.EquipmentState.Items;
+
+            var loadout = res.LoadoutStates[res.SelectedLoadout];
+            var itemSlots = loadout.ItemSlots;
+            var playerRepo = this.PlayerRepoState;
+
+            var items = itemSlots.Select(x => playerRepo.GetItemById(x.Id)).ToList();
+
+            return items;
         }
 
         public void SetEquippedItems(string charecterCode, IEnumerable<Item> items)

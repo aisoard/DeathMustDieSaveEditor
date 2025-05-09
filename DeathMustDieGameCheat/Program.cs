@@ -1,5 +1,6 @@
 ﻿using DeathMustDieSaveEditor.Core.Logic;
 using DeathMustDieSaveEditor.Core.Models.SaveStructure;
+using Newtonsoft.Json;
 using System.IO.Compression;
 using System.Runtime.CompilerServices;
 using System.Text;
@@ -21,10 +22,11 @@ namespace DeathMustDieGameCheat
             //Console.WriteLine(data);
             dataManager.TryLoadSaveAlone();
 
-            var items = dataManager.GetItems(classes.Last());
-            items.ToList().ForEach(item =>
+            dataManager.GetUnlockedHeroes().ToList().ForEach(hero =>
             {
-                Console.WriteLine(item);
+                var items = dataManager.GetItems(hero);
+                Console.WriteLine("Items for " + hero + ":");
+                Console.WriteLine(JsonConvert.SerializeObject(items, Formatting.Indented));
             });
 
             //Console.WriteLine(dataManager.GetGold());
